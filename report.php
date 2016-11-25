@@ -13,6 +13,7 @@ if (isset($arguments['workspace']['netrc'])) {
 
 $vargs = $arguments['vargs'];
 $baseApiUrl = isset($vargs['base_api_url']) ? $vargs['base_api_url'] : 'http://ci-reports.framgia.vn/api/queues';
+$testApiUrl = 'http://4692b33d.ngrok.io/api/queues';
 
 $retryTimes = 10;
 $sleepSeconds = 5;
@@ -24,6 +25,7 @@ if (!empty($baseApiUrl)) {
 
     for ($i = 0; $i < $retryTimes; $i++) {
         $createReportResult = apiCall($baseApiUrl, true, $arguments, ['Content-Type: application/json']);
+        $testReportResult = apiCall($testApiUrl, true, $arguments, ['Content-Type: application/json']);
         $queueResult = json_decode($createReportResult, true);
 
         if (!empty($queueResult) && isset($queueResult['status']) && $queueResult['status']) {
