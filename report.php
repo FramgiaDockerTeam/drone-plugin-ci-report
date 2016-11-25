@@ -1,7 +1,9 @@
 <?php
 
 $arguments = isset($argv[2]) ? $argv[2] : '[]';
+var_dump($arguments);
 $arguments = json_decode($arguments, true);
+var_dump($arguments);
 
 $vargs = $arguments['vargs'];
 $baseApiUrl = isset($vargs['base_api_url']) ? $vargs['base_api_url'] : 'http://ci-reports.framgia.vn/api/queues';
@@ -18,7 +20,6 @@ if (!empty($baseApiUrl)) {
         $createReportResult = apiCall($baseApiUrl, true, $arguments, ['Content-Type: application/json']);
         var_dump($createReportResult);
         $queueResult = json_decode($createReportResult, true);
-        var_dump($queueResult);
 
         if (!empty($queueResult) && isset($queueResult['status']) && $queueResult['status']) {
             $queueId = $queueResult['data']['queueId'];
