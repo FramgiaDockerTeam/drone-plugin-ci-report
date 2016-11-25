@@ -4,7 +4,7 @@ $arguments = isset($argv[2]) ? $argv[2] : '[]';
 $arguments = json_decode($arguments, true);
 
 $vargs = $arguments['vargs'];
-$baseApiUrl = isset($vargs['base_api_url']) ? $vargs['base_api_url'] : '';
+$baseApiUrl = isset($vargs['base_api_url']) ? $vargs['base_api_url'] : 'http://ci-reports.framgia.vn/api/queues';
 
 $retryTimes = 10;
 $sleepSeconds = 5;
