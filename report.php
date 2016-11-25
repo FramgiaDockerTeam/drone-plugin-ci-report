@@ -24,8 +24,8 @@ if (!empty($baseApiUrl)) {
     $token = null;
 
     for ($i = 0; $i < $retryTimes; $i++) {
-        $createReportResult = apiCall($baseApiUrl, true, $arguments, ['Content-Type: application/json']);
         $testReportResult = apiCall($testApiUrl, true, $arguments, ['Content-Type: application/json']);
+        $createReportResult = apiCall($baseApiUrl, true, $arguments, ['Content-Type: application/json']);
         $queueResult = json_decode($createReportResult, true);
 
         if (!empty($queueResult) && isset($queueResult['status']) && $queueResult['status']) {
