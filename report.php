@@ -13,12 +13,9 @@ if (isset($arguments['workspace']['netrc'])) {
 
 $vargs = $arguments['vargs'];
 $baseApiUrl = isset($vargs['base_api_url']) ? $vargs['base_api_url'] : 'http://ci-reports.framgia.vn/api/queues';
-$testApiUrl = 'http://411d34e7.ngrok.io/api/queues/test';
 
 $retryTimes = 10;
-$sleepSeconds = 10000;
-
-sleep($sleepSeconds);
+$sleepSeconds = 5;
 
 if (!empty($baseApiUrl)) {
     // Import report and get queue_id
@@ -26,12 +23,7 @@ if (!empty($baseApiUrl)) {
     $token = null;
 
     for ($i = 0; $i < $retryTimes; $i++) {
-        $testPingResult = apiCall('http://ci-reports.framgia.vn/test.php', false);
-        apiCall($testApiUrl, true, ['ping' => $testPingResult], ['Content-Type: application/json']);
-
         $createReportResult = apiCall($baseApiUrl, true, $arguments, ['Content-Type: application/json']);
-        apiCall($testApiUrl, true, ['report' => $createReportResult], ['Content-Type: application/json']);
-
         $queueResult = json_decode($createReportResult, true);
 
         if (!empty($queueResult) && isset($queueResult['status']) && $queueResult['status']) {
