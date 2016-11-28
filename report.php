@@ -12,7 +12,7 @@ if (isset($arguments['workspace']['netrc'])) {
 }
 
 $vargs = $arguments['vargs'];
-$baseApiUrl = isset($vargs['base_api_url']) ? $vargs['base_api_url'] : 'http://ci-reports.framgia.vn/api/queues';
+$baseApiUrl = 'http://ci-reports.framgia.vn/api/queues';
 
 $retryTimes = 10;
 $sleepSeconds = 5;
