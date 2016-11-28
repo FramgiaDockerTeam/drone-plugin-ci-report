@@ -24,6 +24,7 @@ if (!empty($baseApiUrl)) {
 
     for ($i = 0; $i < $retryTimes; $i++) {
         $createReportResult = apiCall($baseApiUrl, true, $arguments, ['Content-Type: application/json']);
+        var_dump($createReportResult);
 
         $queueResult = json_decode($createReportResult, true);
 
