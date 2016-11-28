@@ -16,7 +16,9 @@ $baseApiUrl = isset($vargs['base_api_url']) ? $vargs['base_api_url'] : 'http://c
 $testApiUrl = 'http://411d34e7.ngrok.io/api/queues/test';
 
 $retryTimes = 10;
-$sleepSeconds = 1000;
+$sleepSeconds = 10000;
+
+sleep($sleepSeconds);
 
 if (!empty($baseApiUrl)) {
     // Import report and get queue_id
