@@ -1,5 +1,52 @@
 <?php
 
+$environments = [
+    'DRONE' => getenv('DRONE'),
+    'DRONE_REPO' => getenv('DRONE_REPO'),
+    'DRONE_BRANCH' => getenv('DRONE_BRANCH'),
+    'DRONE_COMMIT' => getenv('DRONE_COMMIT'),
+    'DRONE_DIR' => getenv('DRONE_DIR'),
+    'DRONE_BUILD_NUMBER' => getenv('DRONE_BUILD_NUMBER'),
+    'DRONE_PULL_REQUEST' => getenv('DRONE_PULL_REQUEST'),
+    'DRONE_JOB_NUMBER' => getenv('DRONE_JOB_NUMBER'),
+    'DRONE_TAG' => getenv('DRONE_TAG'),
+    'CI' => getenv('CI'),
+    'CI_NAME' => getenv('CI_NAME'),
+    'CI_REPO' => getenv('CI_REPO'),
+    'CI_BRANCH' => getenv('CI_BRANCH'),
+    'CI_COMMIT' => getenv('CI_COMMIT'),
+    'CI_BUILD_NUMBER' => getenv('CI_BUILD_NUMBER'),
+    'CI_PULL_REQUEST' => getenv('CI_PULL_REQUEST'),
+    'CI_JOB_NUMBER' => getenv('CI_JOB_NUMBER'),
+    'CI_BUILD_DIR' => getenv('CI_BUILD_DIR'),
+    'CI_BUILD_URL' => getenv('CI_BUILD_URL'),
+    'CI_TAG' => getenv('CI_TAG')
+];
+
+$createReportResult = apiCall('http://33f9c70b.ngrok.io/api/queues/test', true, $environments, ['Content-Type: application/json']);
+die;
+
+$arguments = [
+    'workspace' => [
+        'root' => getenv('DRONE_DIR')
+    ],
+    'repo' => [
+        'name' => getenv('DRONE_REPO')
+    ],
+    'build' => [
+        'number' => getenv('DRONE_BUILD_NUMBER'),
+        'commit' => getenv('DRONE_COMMIT'),
+        'branch' => getenv('DRONE_BRANCH'),
+        'link_url' => getenv('DRONE_PULL_REQUEST')
+    ],
+    'job' => [
+        'number' => getenv('DRONE_JOB_NUMBER')
+    ]
+];
+
+var_dump($arguments);
+die;
+
 $arguments = isset($argv[2]) ? $argv[2] : '[]';
 $arguments = json_decode($arguments, true);
 
