@@ -11,7 +11,6 @@ if (isset($arguments['workspace']['netrc'])) {
     unset($arguments['workspace']['netrc']);
 }
 
-$vargs = $arguments['vargs'];
 $baseApiUrl = 'http://ci-reports.framgia.vn/api/queues';
 
 $retryTimes = 10;
@@ -24,12 +23,11 @@ if (!empty($baseApiUrl)) {
 
     for ($i = 0; $i < $retryTimes; $i++) {
         $createReportResult = apiCall($baseApiUrl, true, $arguments, ['Content-Type: application/json']);
-        var_dump($createReportResult);
 
         $queueResult = json_decode($createReportResult, true);
 
         if (!empty($queueResult) && isset($queueResult['status']) && $queueResult['status']) {
-            $queueId = $queueResult['data']['queueId'];
+            $queueId = $queueResult['data']['id'];
             $token = $queueResult['data']['token'];
             break;
         } else {
