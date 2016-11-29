@@ -27,7 +27,7 @@ if (!empty($baseApiUrl)) {
         $queueResult = json_decode($createReportResult, true);
 
         if (!empty($queueResult) && isset($queueResult['status']) && $queueResult['status']) {
-            $queueId = $queueResult['data']['id'];
+            $queueId = $queueResult['data']['queueId'];
             $token = $queueResult['data']['token'];
             break;
         } else {
