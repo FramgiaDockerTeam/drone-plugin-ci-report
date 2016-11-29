@@ -26,7 +26,7 @@ if (!empty($baseApiUrl)) {
 
         $queueResult = json_decode($createReportResult, true);
 
-        if (!empty($queueResult) && isset($queueResult['status']) && $queueResult['status']) {
+        if (!empty($queueResult) && isset($queueResult['errorCode']) && !$queueResult['errorCode']) {
             $queueId = $queueResult['data']['queueId'];
             $token = $queueResult['data']['token'];
             break;
@@ -47,7 +47,7 @@ if (!empty($baseApiUrl)) {
             $checkQueueResult = apiCall($baseApiUrl . '/' . $queueId, false, [], ["token: $token"]);
             $result = json_decode($checkQueueResult, true);
 
-            if (!empty($result) && isset($result['status']) && $result['status']) {
+            if (!empty($result) && isset($result['errorCode']) && !$result['errorCode']) {
                 echo "{$result['data']['status']}\r\n";
 
                 if (in_array($result['data']['status'], ['success', 'error'])) {
