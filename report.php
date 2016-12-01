@@ -6,6 +6,7 @@ if (file_exists('.git')) {
 }
 
 $baseApiUrl = 'http://ci-reports.framgia.vn/api/queues';
+$resultFile = 'framgia_ci_result.tmp';
 $repoArr = explode('/', getenv('DRONE_REPO'));
 
 $arguments = [
@@ -31,50 +32,52 @@ $arguments = [
 $retryTimes = 10;
 $sleepSeconds = 5;
 
-if (!empty($baseApiUrl)) {
-    // Import report and get queue_id
-    $queueId = null;
-    $token = null;
+// Import report and get queue_id
+$queueId = null;
+$token = null;
+
+for ($i = 0; $i < $retryTimes; $i++) {
+    $createReportResult = apiCall($baseApiUrl, true, $arguments, ['Content-Type: application/json']);
+
+    $queueResult = json_decode($createReportResult, true);
+
+    if (!empty($queueResult) && isset($queueResult['errorCode']) && !$queueResult['errorCode']) {
+        $queueId = $queueResult['data']['queueId'];
+        $token = $queueResult['data']['token'];
+        break;
+    } else {
+        echo "Api create report failed (" . ($i + 1) . " times)\r\n";
+    }
+
+    sleep($sleepSeconds);
+}
+
+// Check queue_id status
+if (!empty($queueId)) {
+    echo "Queue ID: $queueId\r\nNow tracking status...\r\n";
 
     for ($i = 0; $i < $retryTimes; $i++) {
-        $createReportResult = apiCall($baseApiUrl, true, $arguments, ['Content-Type: application/json']);
-
-        $queueResult = json_decode($createReportResult, true);
-
-        if (!empty($queueResult) && isset($queueResult['errorCode']) && !$queueResult['errorCode']) {
-            $queueId = $queueResult['data']['queueId'];
-            $token = $queueResult['data']['token'];
-            break;
-        } else {
-            echo "Api create report failed (" . ($i + 1) . " times)\r\n";
-        }
-
         sleep($sleepSeconds);
-    }
 
-    // Check queue_id status
-    if (!empty($queueId)) {
-        echo "Queue ID: $queueId\r\nNow tracking status...\r\n";
+        $checkQueueResult = apiCall($baseApiUrl . '/' . $queueId, false, [], ["token: $token"]);
+        $result = json_decode($checkQueueResult, true);
 
-        for ($i = 0; $i < $retryTimes; $i++) {
-            sleep($sleepSeconds);
+        if (!empty($result) && isset($result['errorCode']) && !$result['errorCode']) {
+            echo "{$result['data']['status']}\r\n";
 
-            $checkQueueResult = apiCall($baseApiUrl . '/' . $queueId, false, [], ["token: $token"]);
-            $result = json_decode($checkQueueResult, true);
-
-            if (!empty($result) && isset($result['errorCode']) && !$result['errorCode']) {
-                echo "{$result['data']['status']}\r\n";
-
-                if (in_array($result['data']['status'], ['success', 'error'])) {
-                    break;
-                }
-            } else {
-                echo "Api check queue status failed (" . ($i + 1) . " times)\r\n";
+            if (in_array($result['data']['status'], ['success', 'error'])) {
+                break;
             }
+        } else {
+            echo "Api check queue status failed (" . ($i + 1) . " times)\r\n";
         }
     }
-} else {
-    echo 'base_api_url is required.';
+}
+
+if (file_exists($resultFile)) {
+    $file = fopen($resultFile, 'r');
+    $result = fread($file, filesize($resultFile));
+    exit(intval($result));
 }
 
 function apiCall($url, $isPost = false, $params = [], $headers = [])
