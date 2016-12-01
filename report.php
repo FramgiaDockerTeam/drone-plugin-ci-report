@@ -1,4 +1,9 @@
+#!/usr/local/bin/php
 <?php
+
+if (file_exists('.git')) {
+    shell_exec('chmod -R o+rx .git/');
+}
 
 $baseApiUrl = 'http://ci-reports.framgia.vn/api/queues';
 $repoArr = explode('/', getenv('DRONE_REPO'));
