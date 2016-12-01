@@ -77,7 +77,7 @@ if (!empty($queueId)) {
 if (file_exists($resultFile)) {
     $file = fopen($resultFile, 'r');
     $result = fread($file, filesize($resultFile));
-    exit(intval($result));
+    exit(!intval($result));
 }
 
 function apiCall($url, $isPost = false, $params = [], $headers = [])
