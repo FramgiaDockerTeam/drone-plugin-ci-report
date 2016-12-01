@@ -77,6 +77,7 @@ if (!empty($queueId)) {
 if (file_exists($resultFile)) {
     $file = fopen($resultFile, 'r');
     $result = fread($file, filesize($resultFile));
+    unlink($resultFile);
     exit(!intval($result));
 }
 
