@@ -80,6 +80,8 @@ if (file_exists($resultFile)) {
     unlink($resultFile);
 }
 
+exit(1);
+
 function apiCall($url, $isPost = false, $params = [], $headers = [])
 {
     try {
