@@ -46,7 +46,7 @@ for ($i = 0; $i < $retryTimes; $i++) {
         $token = $queueResult['data']['token'];
         break;
     } else {
-        echo "Api create report failed (" . ($i + 1) . " times)\n";
+        // echo "Api create report failed (" . ($i + 1) . " times)\n";
     }
 
     sleep($sleepSeconds);
@@ -54,7 +54,7 @@ for ($i = 0; $i < $retryTimes; $i++) {
 
 // Check queue_id status
 if (!empty($queueId)) {
-    echo "Queue ID: $queueId\nNow tracking status...\n";
+    // echo "Queue ID: $queueId\nNow tracking status...\n";
 
     for ($i = 0; $i < $retryTimes; $i++) {
         sleep($sleepSeconds);
@@ -63,13 +63,13 @@ if (!empty($queueId)) {
         $result = json_decode($checkQueueResult, true);
 
         if (!empty($result) && isset($result['errorCode']) && !$result['errorCode']) {
-            echo "{$result['data']['status']}\n";
+            // echo "{$result['data']['status']}\n";
 
             if (in_array($result['data']['status'], ['success', 'error'])) {
                 break;
             }
         } else {
-            echo "Api check queue status failed (" . ($i + 1) . " times)\n";
+            // echo "Api check queue status failed (" . ($i + 1) . " times)\n";
         }
     }
 }
@@ -78,7 +78,7 @@ if (file_exists($resultFile)) {
     $file = fopen($resultFile, 'r');
     $result = fread($file, filesize($resultFile));
     unlink($resultFile);
-    exit(!intval($result));
+    // exit(!intval($result));
 }
 
 function apiCall($url, $isPost = false, $params = [], $headers = [])
