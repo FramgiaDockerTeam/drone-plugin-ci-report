@@ -78,9 +78,8 @@ if (file_exists($resultFile)) {
     $file = fopen($resultFile, 'r');
     $result = fread($file, filesize($resultFile));
     unlink($resultFile);
+    exit(1 - intval($result));
 }
-
-exit(1);
 
 function apiCall($url, $isPost = false, $params = [], $headers = [])
 {
